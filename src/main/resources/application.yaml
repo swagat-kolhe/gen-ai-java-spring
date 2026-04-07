@@ -1,0 +1,19 @@
+server:
+  port: 8081
+
+logging:
+  level:
+    root: INFO
+    com.genai.java.spring: INFO
+    org.springframework.ai: INFO
+    org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor: DEBUG
+
+spring:
+  application:
+    name: gen-ai-java-spring
+  openai:
+    api-key: ${OPENAI_API_KEY}
+    chat:
+      options:
+        model: gpt-4o # gpt-4o-mini # gpt-4o # gpt-5.2 # gpt-3.5-turbo # ai/gemma3 # mistral:7b # Qwen/Qwen2.5-Coder-7B-Instruct
+        model-vision: gpt-4.1-mini
