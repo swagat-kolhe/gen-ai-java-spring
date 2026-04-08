@@ -15,8 +15,8 @@ public class AIProviderConfig {
         return ChatClient.builder(openAiSdkChatModel).build();
     }
 
-    @Bean("vertexAIChatClient")
-    ChatClient vertexAIChatClient(VertexAiGeminiChatModel vertexAiGeminiChatModel) {
-        return ChatClient.builder(vertexAiGeminiChatModel).build();
-    }
+//    @Bean("vertexAIChatClient")
+//    ChatClient vertexAIChatClient(VertexAiGeminiChatModel vertexAiGeminiChatModel) {
+//        return ChatClient.builder(vertexAiGeminiChatModel).build();
+//    }
 }
