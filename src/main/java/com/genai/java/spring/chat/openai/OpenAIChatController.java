@@ -5,11 +5,14 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.ChatClientResponse;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.core.ParameterizedTypeReference;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import reactor.core.publisher.Flux;
 
+import java.time.Duration;
 import java.util.List;
 
 @RestController
@@ -105,5 +108,16 @@ public class OpenAIChatController {
     @PostMapping("/summarize-with-openai-java-client")
     public String summarizeWithOpenAIJavaClient(@RequestBody String message) {
         return openAIService.chat(message);
+    }
+
+    @PostMapping(value = "/summarize-with-streaming" , produces = MediaType.TEXT_EVENT_STREAM_VALUE)
+    public Flux<String> summarizeWithStreaming(@RequestBody String message) {
+        return chatClient.prompt()
+                .system(SYSTEM_PROMPT)
+                .user(message)
+                .stream()
+                .content()
+                .bufferTimeout(40 , Duration.ofMillis(200)) // ~40 tokens or every 200ms
+                .map(tokenList -> String.join("," ,  tokenList));
     }
 }
