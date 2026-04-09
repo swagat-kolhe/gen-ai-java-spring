@@ -2,8 +2,9 @@ package com.genai.java.spring.config;
 
 import com.openai.client.OpenAIClient;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.huggingface.HuggingfaceChatModel;
 import org.springframework.ai.openaisdk.OpenAiSdkChatModel;
-import org.springframework.ai.vertexai.gemini.VertexAiGeminiChatModel;
+//import org.springframework.ai.vertexai.gemini.VertexAiGeminiChatModel;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -19,4 +20,10 @@ public class AIProviderConfig {
 //    ChatClient vertexAIChatClient(VertexAiGeminiChatModel vertexAiGeminiChatModel) {
 //        return ChatClient.builder(vertexAiGeminiChatModel).build();
 //    }
+
+    @Bean("huggingFaceChatClient")
+    ChatClient huggingFaceChatClient(HuggingfaceChatModel huggingfaceChatModel) {
+        return ChatClient.builder(huggingfaceChatModel).build();
+    }
+
 }
