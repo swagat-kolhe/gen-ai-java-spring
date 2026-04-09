@@ -16,11 +16,11 @@ spring:
   application:
     name: gen-ai-java-spring
   openai:
-    api-key: ${HUGGINGFACE_API_KEY} #${OPENAI_API_KEY}
-    base-url: https://router.huggingface.co
+    api-key: dummy-string # ${HUGGINGFACE_API_KEY} #${OPENAI_API_KEY}
+    base-url: http://localhost:12434/engines/llama.cpp #https://router.huggingface.co # Not needed for OpenAI
     chat:
       options:
-        model: Qwen/Qwen2.5-Coder-7B-Instruct:nscale # gpt-4o-mini # gpt-4o # gpt-5.2 # gpt-3.5-turbo # ai/gemma3 # mistral:7b # Qwen/Qwen2.5-Coder-7B-Instruct
+        model: ai/gemma3 # Qwen/Qwen2.5-Coder-7B-Instruct:nscale # gpt-4o-mini # gpt-4o # gpt-5.2 # gpt-3.5-turbo # ai/gemma3 # mistral:7b # Qwen/Qwen2.5-Coder-7B-Instruct
 
 #  vertex:
 #    ai:
