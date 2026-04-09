@@ -38,4 +38,11 @@ spring:
         model: Qwen/Qwen2.5-Coder-14B-Instruct-GGUF
         max-new-tokens: 1024
         temperature: 0.7
+  ollama:
+    base-url: http://localhost:11434
+    chat:
+      options:
+        model: mistral:7b # custom-mistral-model:latest
+        max-new-tokens: 512
+        temperature: 0.7
 
