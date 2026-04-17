@@ -8,18 +8,32 @@ import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.SafeGuardAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
+import org.springframework.ai.chat.client.advisor.vectorstore.VectorStoreChatMemoryAdvisor;
 import org.springframework.ai.chat.memory.ChatMemory;
+import org.springframework.ai.embedding.EmbeddingModel;
 import org.springframework.ai.huggingface.HuggingfaceChatModel;
 import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.ai.openaisdk.OpenAiSdkChatModel;
 //import org.springframework.ai.vertexai.gemini.VertexAiGeminiChatModel;
+import org.springframework.ai.vectorstore.VectorStore;
+import org.springframework.ai.vectorstore.pgvector.PgVectorStore;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.List;
 
 @Configuration
 public class AIProviderConfig {
+
+    @Bean
+    public PgVectorStore pgVectorStore(JdbcTemplate jdbcTemplate,
+                                             @Qualifier("openAiEmbeddingModel") EmbeddingModel embeddingModel) {
+        return PgVectorStore.builder(jdbcTemplate, embeddingModel)
+                .initializeSchema(true)
+                .build();
+    }
 
     @Bean("openAIChatClient")
     ChatClient openAIChatClient(OpenAiSdkChatModel openAiSdkChatModel,
@@ -35,9 +49,11 @@ public class AIProviderConfig {
 
     @Bean("openAIChatClientWithMemory")
     ChatClient openAIChatClientWithMemory(OpenAiSdkChatModel openAiChatModel,
-                                          ChatMemory chatMemory) {
+                                          ChatMemory chatMemory,
+                                          PgVectorStore pgVectorStore) {
         return ChatClient.builder(openAiChatModel)
-                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
+                //.defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
+                .defaultAdvisors(VectorStoreChatMemoryAdvisor.builder(pgVectorStore).build())
                 .build();
     }
 
