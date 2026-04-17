@@ -5,8 +5,10 @@ import com.genai.java.spring.chat.advisor.SystemPromptAdvisor;
 import com.genai.java.spring.chat.advisor.ValidationAdvisor;
 import com.openai.client.OpenAIClient;
 import org.springframework.ai.chat.client.ChatClient;
+import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.SafeGuardAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
+import org.springframework.ai.chat.memory.ChatMemory;
 import org.springframework.ai.huggingface.HuggingfaceChatModel;
 import org.springframework.ai.ollama.OllamaChatModel;
 import org.springframework.ai.openaisdk.OpenAiSdkChatModel;
@@ -28,6 +30,14 @@ public class AIProviderConfig {
                                 ValidationAdvisor validationAdvisor) {
         return ChatClient.builder(openAiSdkChatModel)
                 .defaultAdvisors(safeGuardAdvisor , simpleLoggerAdvisor , errorWrappingAdvisor , systemPromptAdvisor , validationAdvisor)
+                .build();
+    }
+
+    @Bean("openAIChatClientWithMemory")
+    ChatClient openAIChatClientWithMemory(OpenAiSdkChatModel openAiChatModel,
+                                          ChatMemory chatMemory) {
+        return ChatClient.builder(openAiChatModel)
+                .defaultAdvisors(MessageChatMemoryAdvisor.builder(chatMemory).build())
                 .build();
     }
 
